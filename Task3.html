@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 3: Advanced Web Development</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        main {
+            padding: 2rem 0;
+        }
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+        .carousel-container {
+            position: relative;
+            max-width: 100%;
+            margin: 0 auto;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .carousel-slide {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+        }
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .carousel-slide.active img {
+            transform: scale(1.05);
+        }
+        .carousel-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            padding: 0 1rem;
+            pointer-events: none;
+        }
+        .carousel-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+        .carousel-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .indicator.active {
+            background: #667eea;
+            transform: scale(1.2);
+        }
+        .api-content {
+            min-height: 200px;
+        }
+        .joke-display {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .refresh-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        .refresh-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .loading {
+            text-align: center;
+            color: #667eea;
+            font-style: italic;
+        }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .card {
+                padding: 1.5rem;
+            }
+            .carousel-slide {
+                height: 250px;
+            }
+            .carousel-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            .container {
+                padding: 0 0.5rem;
+            }
+        }
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+                letter-spacing: 1px;
+            }
+            .card {
+                padding: 1rem;
+                margin: 0.5rem;
+            }
+            .card h2 {
+                font-size: 1.4rem;
+            }
+            .carousel-slide {
+                height: 200px;
+            }
+            .carousel-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            .carousel-controls {
+                padding: 0 0.5rem;
+            }
+            .joke-display {
+                padding: 1rem;
+                font-size: 1rem;
+            }
+            .refresh-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+            main {
+                padding: 1rem 0;
+            }
+        }
+        @media (min-width: 1200px) {
+            h1 {
+                font-size: 3rem;
+            }
+            .carousel-slide {
+                height: 400px;
+            }
+            .card {
+                padding: 2.5rem;
+            }
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .carousel-slide.active {
+            animation: slideIn 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Advanced Web Development Showcase</h1>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <div class="content-grid">
+                <div class="card">
+                    <h2>🎨 Interactive Image Carousel</h2>
+                    <div class="carousel-container">
+                        <div class="carousel-slide active">
+                            <img src="https://picsum.photos/600/300?random=1" alt="Beautiful landscape 1" id="slide-0">
+                        </div>
+                        <div class="carousel-controls">
+                            <button class="carousel-btn" id="prevBtn">‹</button>
+                            <button class="carousel-btn" id="nextBtn">›</button>
+                        </div>
+                    </div>
+                    <div class="carousel-indicators" id="indicators">
+                        <div class="indicator active" data-slide="0"></div>
+                        <div class="indicator" data-slide="1"></div>
+                        <div class="indicator" data-slide="2"></div>
+                        <div class="indicator" data-slide="3"></div>
+                        <div class="indicator" data-slide="4"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>😄 Random Jokes API</h2>
+                    <div class="api-content">
+                        <div class="joke-display" id="jokeDisplay">
+                            <div class="loading">Loading a fresh joke...</div>
+                        </div>
+                        <button class="refresh-btn" id="refreshJoke">Get New Joke</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        class ImageCarousel {
+            constructor() {
+                this.currentSlide = 0;
+                this.totalSlides = 5;
+                this.images = [
+                    'https://picsum.photos/600/300?random=1',
+                    'https://picsum.photos/600/300?random=2',
+                    'https://picsum.photos/600/300?random=3',
+                    'https://picsum.photos/600/300?random=4',
+                    'https://picsum.photos/600/300?random=5'
+                ];
+                this.init();
+            }
+            init() {
+                this.slideContainer = document.querySelector('.carousel-slide');
+                this.slideImage = document.getElementById('slide-0');
+                this.prevBtn = document.getElementById('prevBtn');
+                this.nextBtn = document.getElementById('nextBtn');
+                this.indicators = document.querySelectorAll('.indicator');
+                this.prevBtn.addEventListener('click', () => this.prevSlide());
+                this.nextBtn.addEventListener('click', () => this.nextSlide());
+                this.indicators.forEach((indicator, index) => {
+                    indicator.addEventListener('click', () => this.goToSlide(index));
+                });
+                this.autoPlay();
+                this.slideContainer.addEventListener('mouseenter', () => this.pauseAutoPlay());
+                this.slideContainer.addEventListener('mouseleave', () => this.autoPlay());
+            }
+            nextSlide() {
+                this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+                this.updateSlide();
+            }
+            prevSlide() {
+                this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+                this.updateSlide();
+            }
+            goToSlide(slideIndex) {
+                this.currentSlide = slideIndex;
+                this.updateSlide();
+            }
+            updateSlide() {
+                this.slideImage.src = this.images[this.currentSlide];
+                this.slideImage.alt = `Beautiful landscape ${this.currentSlide + 1}`;
+                this.indicators.forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === this.currentSlide);
+                });
+                this.slideContainer.classList.remove('active');
+                setTimeout(() => {
+                    this.slideContainer.classList.add('active');
+                }, 10);
+            }
+            autoPlay() {
+                this.pauseAutoPlay();
+                this.autoPlayInterval = setInterval(() => {
+                    this.nextSlide();
+                }, 5000);
+            }
+            pauseAutoPlay() {
+                if (this.autoPlayInterval) {
+                    clearInterval(this.autoPlayInterval);
+                }
+            }
+        }
+        class JokeAPI {
+            constructor() {
+                this.apiUrl = 'https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&type=single';
+                this.jokeDisplay = document.getElementById('jokeDisplay');
+                this.refreshBtn = document.getElementById('refreshJoke');
+                this.init();
+            }
+            init() {
+                this.fetchJoke();
+                this.refreshBtn.addEventListener('click', () => this.fetchJoke());
+            }
+            async fetchJoke() {
+                try {
+                    this.showLoading();
+                    const response = await fetch(this.apiUrl);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    this.displayJoke(data.joke);
+                } catch (error) {
+                    console.error('Error fetching joke:', error);
+                    this.displayError();
+                }
+            }
+            showLoading() {
+                this.jokeDisplay.innerHTML = '<div class="loading">Loading a fresh joke...</div>';
+                this.refreshBtn.disabled = true;
+                this.refreshBtn.textContent = 'Loading...';
+            }
+            displayJoke(joke) {
+                this.jokeDisplay.innerHTML = `<p>${joke}</p>`;
+                this.refreshBtn.disabled = false;
+                this.refreshBtn.textContent = 'Get New Joke';
+            }
+            displayError() {
+                this.jokeDisplay.innerHTML = '<p>Oops! Something went wrong. Please try again later.</p>';
+                this.refreshBtn.disabled = false;
+                this.refreshBtn.textContent = 'Try Again';
+            }
+        }
+        class ResponsiveHandler {
+            constructor() {
+                this.init();
+            }
+            init() {
+                window.addEventListener('resize', () => this.handleResize());
+                this.handleResize();
+            }
+            handleResize() {
+                const width = window.innerWidth;
+                const carouselSlide = document.querySelector('.carousel-slide');
+                if (width <= 480) {
+                    carouselSlide.style.height = '200px';
+                } else if (width <= 768) {
+                    carouselSlide.style.height = '250px';
+                } else if (width >= 1200) {
+                    carouselSlide.style.height = '400px';
+                } else {
+                    carouselSlide.style.height = '300px';
+                }
+                console.log(`Viewport: ${width}px - Layout adjusted`);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const carousel = new ImageCarousel();
+            const jokeAPI = new JokeAPI();
+            const responsiveHandler = new ResponsiveHandler();
+            console.log('🚀 Task 3 Web Application Initialized Successfully!');
+            console.log('✅ Image Carousel: Active');
+            console.log('✅ API Integration: Active');
+            console.log('✅ Responsive Design: Active');
+        });
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        function isTouchDevice() {
+            return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        }
+        if (isTouchDevice()) {
+            let startX = 0;
+            let endX = 0;
+            const carouselContainer = document.querySelector('.carousel-container');
+            carouselContainer.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+            });
+            carouselContainer.addEventListener('touchend', (e) => {
+                endX = e.changedTouches[0].clientX;
+                handleSwipe();
+            });
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const diff = startX - endX;
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        document.getElementById('nextBtn').click();
+                    } else {
+                        document.getElementById('prevBtn').click();
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
